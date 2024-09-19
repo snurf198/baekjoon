@@ -1,11 +1,9 @@
 #include <iostream>
 #include <cstring>
+#include <vector>
+#include <cmath>
 
 using namespace std;
-
-bool isPrime[100001];
-int lnum[100001];
-int count[100001];
 
 int main() {
   ios::sync_with_stdio(0);
@@ -13,35 +11,37 @@ int main() {
 
   int A, B;
 
-  cin >> A >> B;
+  scanf("%d %d", &A, &B);
+  vector<bool> isNotPrime(B+1);
+  vector<int> count(B-A+1);
 
-  memset(isPrime, true, sizeof(isPrime));
-  isPrime[0] = false;
-  isPrime[1] = false;
-
-  for (int i = 1; i <= 100001; i++) {
-    lnum[i] = i;
-  }
+  isNotPrime[0] = true;
+  isNotPrime[1] = true;
 
   for (int i = 2; i <= B; i++) {
-    if(!isPrime[i]) continue;
+    if(isNotPrime[i]) continue;
 
     for (int j = 2; j <= B/i; j++) {
-      isPrime[i*j] = false;
-      while(lnum[i*j] % i == 0) {
-        lnum[i*j] /= i;
-        count[i*j]++;
+      isNotPrime[i*j] = true;
+
+      int mulOfPNum = i*j;
+      int temp = mulOfPNum;
+      if ((mulOfPNum - A) >= 0) {
+        while((temp % i == 0)) {
+          count[mulOfPNum-A]++;
+          temp /= i;
+        }
       }
     }
   }
 
   int result = 0;
 
-  for (int i = A; i <= B; i++) {
-    if(isPrime[count[i]]) result++;
+  for (int i = 0; i <= B-A; i++) {
+    if(!isNotPrime[count[i]]) result++;
   }
 
-  cout << result << '\n';
+  printf("%d\n", result);
 
   return 0;
 }
