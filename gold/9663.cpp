@@ -4,31 +4,31 @@ using namespace std;
 
 int board[15][15];
 
-void operate_queen(int x, int y, int dir) {
-    for (int i = 0; i < 15; i++) {
+void operate_queen(int x, int y, int dir, int N) {
+    for (int i = 1; i <= N; i++) {
         board[x][i] += dir;
     }
 
-    for (int i = 0; i < 15; i++) {
+    for (int i = 1; i <= N; i++) {
         board[i][y] += dir;
     }
 
     int i = x, j = y;
-    while(i < 15 && j < 15) {
+    while(i <= N && j <= N) {
         board[i][j] += dir;
         i++;
         j++;
     }
 
     i = x, j = y;
-    while(i < 15 && 0 < j) {
+    while(i <= N && 0 < j) {
         board[i][j] += dir;
         i++;
         j--;
     }
 
     i = x, j = y;
-    while(0 < i && j < 15) {
+    while(0 < i && j <= N) {
         board[i][j] += dir;
         i--;
         j++;
@@ -42,16 +42,16 @@ void operate_queen(int x, int y, int dir) {
     }
 }
 
-int run(int x, int N) {
-    if (x == N) {
+int run(int current_num_queen, int N) {
+    if (current_num_queen == N) {
         return 1;
     }
     int sum = 0;
-    for (int j = 1; j <= N; j++) {
-        if (board[x+1][j] == 0) {
-            operate_queen(x+1, j, 1);
-            sum += run(x + 1, N);
-            operate_queen(x+1, j, -1);
+    for (int i = 1; i <= N; i++) {
+        if (board[current_num_queen+1][i] == 0) {
+            operate_queen(current_num_queen + 1, i, 1, N);
+            sum += run(current_num_queen + 1, N);
+            operate_queen(current_num_queen + 1, i, -1, N);
         }
     }
 
@@ -62,14 +62,14 @@ int main() {
   ios::sync_with_stdio(0);
   cin.tie(0);
 
-  for (int i = 0; i < 15; i++) {
-    for (int j = 0; j < 15; j++) {
+  int N;
+  cin >> N;
+
+  for (int i = 1; i <= N; i++) {
+    for (int j = 1; j <= N; j++) {
         board[i][j] = 0;
     }
   }
-
-  int N;
-  cin >> N;
 
   cout << run(0, N);
 
